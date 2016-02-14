@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import net.binggl.commons.exceptions.LogRuntimeException;
 
 /**
- * @see https://gist.github.com/jfager/9317201
+ * https://gist.github.com/jfager/9317201
  * 
  * <pre>
  * {@code

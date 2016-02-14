@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * throw this exception if you just can't handle the error, or there is no know
  * resolution available
- * @see http://googletesting.blogspot.co.at/2009/09/checked-exceptions-i-love-you-but-you.html
+ * http://googletesting.blogspot.co.at/2009/09/checked-exceptions-i-love-you-but-you.html
  * @author henrik
  */
 public class LogRuntimeException extends RuntimeException {
