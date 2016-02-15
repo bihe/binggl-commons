@@ -20,13 +20,13 @@ public class EncryptionTest {
 		String encrypted = aesCrypto.encrypt(key, plain);
 		assertNotNull(encrypted);
 		assertTrue(StringUtils.isNotEmpty(encrypted));
-		String decrypted = aesCrypto.decrypt(key, encrypted);
+		String decrypted = aesCrypto.decryptAsString(key, encrypted);
 		assertNotNull(decrypted);
 		assertEquals(plain, decrypted);
 		
 		// 2. Decrypt with other instance - same result
 		AesEncryption aesCrypto1 = new AesEncryption();
-		decrypted = aesCrypto1.decrypt(key, encrypted);
+		decrypted = aesCrypto1.decryptAsString(key, encrypted);
 		assertNotNull(decrypted);
 		assertEquals(plain, decrypted);
 		

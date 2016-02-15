@@ -12,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,15 @@ public class AesEncryption {
 	}
 	
 	public String encrypt(String key, String value) {
+		if(StringUtils.isNotEmpty(value)) {
+			return wrapEx(() -> {
+				return this.encrypt(key, value.getBytes(ENCODING));
+			});
+		}
+		return null;
+	}
+	
+	public String encrypt(String key, byte[] value) {
 		try {
 			
 			byte[] initVector = new byte[IV_VECTOR_LENGHT];
@@ -40,7 +50,7 @@ public class AesEncryption {
 			Cipher cipher = Cipher.getInstance(CIPHER_INSTANCE);
 			cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
-			byte[] encrypted = cipher.doFinal(value.getBytes());
+			byte[] encrypted = cipher.doFinal(value);
 			
 			// prepend the iv to the encrypted message
 			encrypted = ArrayUtils.addAll(iv.getIV(), encrypted);
@@ -53,10 +63,24 @@ public class AesEncryption {
 		return null;
 	}
 
-	public String decrypt(String key, String encrypted) {
+	public String decryptAsString(String key, String encrypted) {
+		if(StringUtils.isNotEmpty(encrypted)) {
+			return wrapEx(() -> {
+				return new String(this.decrypt(key, encrypted));
+			});
+		}
+		return null;
+		
+	}
+	
+	public byte[] decrypt(String key, String encrypted) {
+		return this.decrypt(key, Base64.decodeBase64(encrypted));
+	}
+	
+	public byte[] decrypt(String key, byte[] encrypted) {
 		try {
 			
-			byte[] ivAndEncrypted = Base64.decodeBase64(encrypted);
+			byte[] ivAndEncrypted = encrypted;
 			byte[] initVector = Arrays.copyOf(ivAndEncrypted, IV_VECTOR_LENGHT);
 			byte[] encryptionPaylod = Arrays.copyOfRange(ivAndEncrypted, IV_VECTOR_LENGHT, ivAndEncrypted.length);
 			
@@ -68,14 +92,12 @@ public class AesEncryption {
 			
 			byte[] original = cipher.doFinal(encryptionPaylod);
 
-			return new String(original);
+			return original;
 		} catch (Exception ex) {
 			logger.error("Could not perform decryption: {}", ex.getMessage(), ex);
 		}
-
 		return null;
 	}
-
 	
 	private byte[] generateKey(String provided) {
 		 return wrapEx(() -> {
@@ -86,12 +108,4 @@ public class AesEncryption {
 			return key;
 		});
 	}
-	
-	
-//	public static void main(String[] args) {
-//		String key = "Bar12345Bar12345"; // 128 bit key
-//		String initVector = "RandomInitVector"; // 16 bytes IV
-//
-//		System.out.println(decrypt(key, initVector, encrypt(key, initVector, "Hello World")));
-//	}
 }
