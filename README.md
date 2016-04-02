@@ -1,5 +1,5 @@
 # binggl-commons
-Common logic packed into a library
+Common Java logic packed into a library
 
 
 [![Build Status](https://travis-ci.org/bihe/binggl-commons.png)](https://travis-ci.org/bihe/binggl-commons)
