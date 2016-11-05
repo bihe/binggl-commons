@@ -2,6 +2,7 @@ package net.binggl.commons.crypto;
 
 import static net.binggl.commons.util.ExceptionHelper.wrapEx;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 public class AesEncryption {
 	
 	private static final String CIPHER_INSTANCE = "AES/CBC/PKCS5PADDING"; 
-	private static final String ENCODING = "UTF-8";
 	private static final String ALGORITHM_AES = "AES";
 	private static final String ALGORITHM_SHA = "SHA-256";
 	private static final Logger logger = LoggerFactory.getLogger(AesEncryption.class);
@@ -32,7 +32,7 @@ public class AesEncryption {
 	public String encrypt(String key, String value) {
 		if(StringUtils.isNotEmpty(value)) {
 			return wrapEx(() -> {
-				return this.encrypt(key, value.getBytes(ENCODING));
+				return this.encrypt(key, value.getBytes(StandardCharsets.UTF_8));
 			});
 		}
 		return null;
@@ -101,7 +101,7 @@ public class AesEncryption {
 	
 	private byte[] generateKey(String provided) {
 		 return wrapEx(() -> {
-			byte[] key = provided.getBytes(ENCODING);
+			byte[] key = provided.getBytes(StandardCharsets.UTF_8);
 			MessageDigest sha = MessageDigest.getInstance(ALGORITHM_SHA);
 			key = sha.digest(key);
 			key = Arrays.copyOf(key, 16); // use only first 128 bit
