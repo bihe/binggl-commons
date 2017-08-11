@@ -15,7 +15,7 @@ public class EncryptionTest {
 		
 		String key = "this_is_my_secret_password";
 		String plain = "You can read me";
-		
+
 		// 1. Roundtrip
 		String encrypted = aesCrypto.encrypt(key, plain);
 		assertNotNull(encrypted);
